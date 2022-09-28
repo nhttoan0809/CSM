@@ -16,7 +16,7 @@ export default function SelectHeader(props) {
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120, marginRight: '10px' }}>
       <FormControl fullWidth size="small">
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
@@ -31,9 +31,6 @@ export default function SelectHeader(props) {
                     <MenuItem key={indx} value={item.value}>{item.title}</MenuItem>
                 ))
             }
-          {/* <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem> */}
         </Select>
       </FormControl>
     </Box>
