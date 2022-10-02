@@ -6,13 +6,18 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function SelectHeader(props) {
-  const [agent, setAgent] = React.useState('');
-
   const label = props.label;
-  const itemList = props.itemList || [{title:'', value: ''}];
+  const itemList = props.itemList
+  //  || [{ title: '', value: '' }];
+
+  // console.log(`title: ${label}, itemList: ${itemList}`)
+
+  const [ value, setValue ] = React.useState(-1)
+  const handleChangeSelect = props.handleChangeSelect
 
   const handleChange = (event) => {
-    setAgent(event.target.value);
+    handleChangeSelect(event.target.value)
+    setValue(event.target.value);
   };
 
   return (
@@ -22,15 +27,15 @@ export default function SelectHeader(props) {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={agent}
+          value={value}
           label={label}
           onChange={handleChange}
         >
-            {
-                itemList.map((item, indx) => (
-                    <MenuItem key={indx} value={item.value}>{item.title}</MenuItem>
-                ))
-            }
+          {
+            itemList.map((item, indx) => (
+              <MenuItem key={indx} value={item.value}>{item.title}</MenuItem>
+            ))
+          }
         </Select>
       </FormControl>
     </Box>

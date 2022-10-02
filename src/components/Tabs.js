@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -40,39 +41,30 @@ function a11yProps(index) {
 
 export default function BasicTabs(props) {
 
+  const navigate = useNavigate();
   const tabsList = props.tabsList
-
   const [value, setValue] = React.useState(0);
-  const [currentComponent, setCurrentComponent] = React.useState(<></>)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  React.useEffect(() => {
-
-    fetch(tabsList[value].url)
-      .then((response) => response.json())
-      .then((data) => {
-        setCurrentComponent(
-          tabsList[value].generateComponent(data.map(data => data.title))
-        )
-      });
-
-  }, [value])
+  // React.useEffect(() => {
+  //   navigate(tabsList[0].url)
+  // }, [])
 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           {tabsList.map((tab, index) => (
-            <Tab key={index} label={tab.title} {...a11yProps(index)} />
+            <Tab onClick={() => {navigate(tab.url)}} key={index} label={tab.title} {...a11yProps(index)} />
           ))}
         </Tabs>
       </Box>
       {tabsList.map((element, index) => (
         <TabPanel key={index} value={value} index={index}>
-          {currentComponent}
+          <Outlet />
         </TabPanel>
       ))}
     </Box>
