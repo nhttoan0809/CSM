@@ -5,10 +5,10 @@ export const warehouseSlice = createSlice({
     initialState: {
         currentWarehouse: -1,
         warehouseList: [
-            {
-                id: -1,
-                name: 'None'
-            }
+            // {
+            //     id: -1,
+            //     name: 'None'
+            // }
         ]
     },
     reducers: {

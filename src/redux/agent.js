@@ -5,18 +5,21 @@ export const agentSlice = createSlice({
     initialState: {
         currentAgent: -1,
         agentList: [
-            {
-                id: 'agent1id',
-                name: 'Đại lý 1',
-            },
-            {
-                id: 'agent2id',
-                name: 'Đại lý 2'
-            },
-            {
-                id: -1,
-                name: 'None'
-            }
+            // {
+            //     agent_id: 'agent1id',
+            //     agent_name: 'Đại lý 1',
+            //     agent_owner: 'ABC'
+            // },
+            // {
+            //     agent_id: 'agent2id',
+            //     agent_name: 'Đại lý 2',
+            //     agent_owner: 'xyz'
+            // },
+            // {
+            //     agent_id: 'agent3id',
+            //     agent_name: 'Đại lý 3',
+            //     agent_owner: 'DEF'
+            // },
         ]
     },
     reducers: {
