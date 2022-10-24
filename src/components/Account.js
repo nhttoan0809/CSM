@@ -39,7 +39,8 @@ function stringToColor(string) {
 function stringAvatar(name) {
     return {
         sx: {
-            bgcolor: stringToColor(name),
+            // bgcolor: stringToColor(name),
+            bgcolor: '#6941c6',
         },
         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
     };

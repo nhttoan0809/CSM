@@ -4,20 +4,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useSelector } from "react-redux";
 
-export default function SelectHeader(props) {
+export default function SelectHeaderAgent(props) {
   const label = props.label;
   const itemList = props.itemList;
-
-  const [value, setValue] = React.useState(-1);
   const handleChangeSelect = props.handleChangeSelect;
+
+  const value = useSelector(state => state.agent.currentAgent);
 
   const handleChange = (event) => {
     const value = event.target.value;
-    if(value!==-1){
-      handleChangeSelect(value);
-    }
-    setValue(value);
+    handleChangeSelect(value);
   };
 
   return (

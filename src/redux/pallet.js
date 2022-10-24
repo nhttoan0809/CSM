@@ -28,7 +28,7 @@ export const palletSlice = createSlice({
   },
   reducers: {
     setPalletList: (state, actions) => {
-      console.log("Handle dispath: setPalletList")
+      // console.log("Handle dispath: setPalletList")
       return {
         ...state,
         palletList: actions.payload,

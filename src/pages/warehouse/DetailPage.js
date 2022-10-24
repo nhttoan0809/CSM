@@ -1,15 +1,18 @@
 import { Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import EnhancedTable from "./../../components/Table";
+import * as api from './../../api'
+import { useSelector } from "react-redux";
 
 const WarehouseDetailPage = () => {
+
   useEffect(() => {
-    fetch("http://localhost:5000/test_data/getAllWarehouse")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data: ", data)
-        
-      });
+    // const res = api.warehouseAPI.get_all(currentAgent)
+    // res.then(data => {
+    //   if(data.status === "Successfully"){
+    //     console.log('data warehouse: ', data.data)
+    //   }
+    // })
   }, []);
 
   return (

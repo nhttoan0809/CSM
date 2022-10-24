@@ -93,7 +93,7 @@ const GoodsDetailPage = () => {
     <>
       {/* Title */}
       {/* <Typography>Chi tiết của hàng hóa</Typography> */}
-      <EnhancedTable headCells={headCells} rows={rows} />
+      <EnhancedTable title={{id: `Goods`, name: 'Hang hoa'}} headCells={headCells} rows={rows} />
     </>
   );
 };

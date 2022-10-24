@@ -7,7 +7,7 @@ export const productSlice = createSlice({
   },
   reducers: {
     setProductList: (state, actions) => {
-      console.log("Handle dispath: setProductList")
+      // console.log("Handle dispath: setProductList")
       return {
         ...state,
         productList: actions.payload,

@@ -7,7 +7,7 @@ export const sensorSlice = createSlice({
   },
   reducers: {
     setSensorList: (state, actions) => {
-      console.log("Handle dispath: setSensorList")
+      // console.log("Handle dispath: setSensorList")
       return {
         ...state,
         sensorList: actions.payload,

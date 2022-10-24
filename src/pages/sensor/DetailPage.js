@@ -57,7 +57,7 @@ const SensorDetailPage = () => {
     <>
       {/* Title */}
       {/* <Typography>Chi tiết của cảm biến</Typography> */}
-      <EnhancedTable headCells={headCells} rows={rows} />
+      <EnhancedTable title={{id: 'Sensor', name: 'Cam bien'}} headCells={headCells} rows={rows} />
     </>
   );
 };

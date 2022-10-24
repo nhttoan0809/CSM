@@ -6,6 +6,7 @@ import palletReducer from './pallet'
 import productReducer from './product'
 import sensorReducer from './sensor'
 import tabReducer from './tabs'
+import drawerReducer from './drawer'
 
 export default configureStore({
     reducer: {
@@ -16,5 +17,6 @@ export default configureStore({
         product: productReducer,
         sensor: sensorReducer,
         tab: tabReducer,
+        drawer: drawerReducer,
     },
 })

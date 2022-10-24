@@ -23,44 +23,8 @@ import WarehousePage from "./pages/warehouse";
 import WarehouseConfigurationPage from "./pages/warehouse/ConfigurationPage";
 import WarehouseDetailPage from "./pages/warehouse/DetailPage";
 import WarehouseMonitorPage from "./pages/warehouse/MonitorPage";
-import { setIdUser, setToken } from "./redux/user";
-import { setAgentList } from "./redux/agent";
 
 function App() {
-  const token = useSelector(state => state.user.token);
-  const id_user = useSelector(state => state.user.id_user);
-  const navigate = useNavigate();
-  const distpatch = useDispatch();
-
-  useEffect(() => {
-    if (token === null) {
-      navigate("/login");
-    }else{
-      if(id_user===null){
-        fetch('http://localhost:5000/test_data/reLogin')
-          .then(response => response.json())
-          .then(data => {
-            const status = data.status
-            if(status==="Successfully"){
-              const id = data.data.user_id
-              distpatch(setIdUser(id))
-              fetch('http://localhost:5000/test_data/getAllAgent')
-                .then(response => response.json())
-                .then(data => {
-                  const status = data.status
-                  if(status==="Successfully"){
-                    const agentList = data.data
-                    distpatch(setAgentList(agentList))
-                  }
-                })
-            }else{
-              distpatch(setToken(null));
-              navigate("/login");
-            }
-          })
-      }
-    }
-  }, [token]);
 
   return (
     <div className="App">

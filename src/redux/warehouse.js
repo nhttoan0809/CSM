@@ -13,7 +13,7 @@ export const warehouseSlice = createSlice({
     },
     reducers: {
         setCurrentWarehouse: (state, actions) => {
-            console.log("Handle dispath: setCurrentWarehouse")
+            // console.log("Handle dispath: setCurrentWarehouse")
             return {
                 ...state, 
                 currentWarehouse: actions.payload
@@ -21,7 +21,7 @@ export const warehouseSlice = createSlice({
         },
 
         setWarehouseList: (state, actions) => {
-            console.log("Handle dispath: setWarehouseList")
+            // console.log("Handle dispath: setWarehouseList")
             return {
                 ...state,
                 warehouseList: actions.payload

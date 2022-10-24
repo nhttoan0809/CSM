@@ -24,7 +24,7 @@ export const agentSlice = createSlice({
     },
     reducers: {
         setCurrentAgent: (state, actions) => {
-            console.log("Handle dispath: setCurrentAgent")
+            // console.log("Handle dispath: setCurrentAgent")
             return {
                 ...state,
                 currentAgent: actions.payload
@@ -32,7 +32,7 @@ export const agentSlice = createSlice({
         },
 
         setAgentList: (state, actions) => {
-            console.log("Handle dispath: setAgentList")
+            // console.log("Handle dispath: setAgentList")
             return {
                 ...state,
                 agentList: actions.payload

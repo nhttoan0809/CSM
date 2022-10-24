@@ -3,25 +3,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EnhancedTable from "../../components/Table";
 import { setPalletList } from "../../redux/pallet";
+import * as api from './../../api'
 
 const headCells = [
   {
-    id: 'pallet_id',
+    id: '_id',
     numeric: false,
     disablePadding: true,
     label: 'ID',
-  },
-  {
-    id: 'pallet_template_id',
-    numeric: false,
-    disablePadding: false,
-    label: 'Pallet mẫu',
-  },
-  {
-    id: 'warehouse_id',
-    numeric: false,
-    disablePadding: false,
-    label: 'ID kho',
   },
   {
     id: 'description',
@@ -36,13 +25,13 @@ const headCells = [
     label: 'Trạng thái',
   },
   {
-    id: 'import_data',
+    id: 'import_date',
     numeric: false,
     disablePadding: false,
     label: 'Ngày nhập',
   },
   {
-    id: 'storage_start_data',
+    id: 'storage_start_date',
     numeric: false,
     disablePadding: false,
     label: 'Ngày SD',
@@ -55,40 +44,49 @@ const headCells = [
   },
 ];
 
-// const rows = []
+const convertPalletToRowsData = (palletList) => {
+  const keys = headCells.map(cell => cell.id);
+
+  const data = palletList.map(pallet => {
+    let newPallet = {}
+    keys.forEach((key) => {
+      newPallet[key] = pallet[key]
+    })
+    return newPallet;
+  })
+
+  // console.log('converted data: ', data);
+
+  return data;
+}
 
 const PalletDetailPage = () => {
 
-  const rows = useSelector(state => state.pallet.palletList)
+  const id_agent = useSelector(state => state.agent.currentAgent)
+  const id_warehouse = useSelector(state => state.warehouse.currentWarehouse)
+  const palletList = useSelector(state => state.pallet.palletList)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    fetch("http://localhost:5000/test_data/getAllPallet")
-      .then((response) => response.json())
+    api.palletAPI.get_all(id_agent, id_warehouse)
       .then((data) => {
-        // console.log("data: ", data)
-        const payloadCustomize = data.data.map((pallet)=>(
-          {
-            pallet_id: pallet.pallet_id,
-            pallet_template_id: pallet.pallet_template_id,
-            warehouse_id: pallet.warehouse_id,
-            description: pallet.description,
-            is_used: pallet.is_used,
-            import_data: pallet.import_data,
-            storage_start_data: pallet.storage_start_data,
-            position: pallet.position,
-          }
-        ))
-        dispatch(setPalletList(payloadCustomize))
+        if (data.status === "Successfully") {
+          dispatch(setPalletList(data.data))
+        } else {
+          dispatch(setPalletList([]))
+        }
       });
   }, []);
 
   return (
     <>
-      {/* Title */}
-      {/* <Typography>Chi tiết của pallet</Typography> */}
-      <EnhancedTable headCells={headCells} rows={rows}/>
+      {/* {convertPalletToRowsData(palletList)} */}
+      <EnhancedTable
+        title={{ id: `Pallet`, name: `Pallet` }}
+        headCells={headCells}
+        rows={convertPalletToRowsData(palletList)}
+      />
     </>
   );
 };
