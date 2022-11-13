@@ -24,13 +24,14 @@ const linkStyle = {
 };
 
 const ButtonCustomized = styled(Button)(() => ({
+  // disabled: true,
   color: "#000000a6",
   minWidth: "170px",
   display: "flex",
   justifyContent: "flex-start",
   marginBottom: ".5rem",
-  paddingLeft: '16px',
-  paddingRight: '10px',
+  paddingLeft: "16px",
+  paddingRight: "10px",
   "&.selected": {
     backgroundColor: "#6941c6",
     "& > *": {
@@ -40,9 +41,16 @@ const ButtonCustomized = styled(Button)(() => ({
 }));
 
 const Sidebar = () => {
-  const currentTab = useSelector(state => state.tab.currentTab)
+  const currentTab = useSelector((state) => state.tab.currentTab);
   const naviagate = useNavigate();
   const distpatch = useDispatch();
+
+  const currentAgent = useSelector((state) => state.agent.currentAgent);
+  // const agentList = useSelector(state => state.agent.agentList)
+  const currentWarehouse = useSelector(
+    (state) => state.warehouse.currentWarehouse
+  );
+  // const warehouseList = useSelector(state => state.warehouse.warehouseList)
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginLeft: "20px" }}>
@@ -59,9 +67,10 @@ const Sidebar = () => {
         </Typography>
 
         <ButtonCustomized
+          disabled={currentWarehouse === -1}
           className={currentTab === "warehouse" ? "selected" : ""}
           onClick={() => {
-            naviagate('warehouse');
+            naviagate("warehouse");
           }}
         >
           <FontAwesomeIcon
@@ -78,10 +87,11 @@ const Sidebar = () => {
         </ButtonCustomized>
 
         <ButtonCustomized
+          disabled={currentWarehouse === -1}
           className={currentTab === "pallet" ? "selected" : ""}
           onClick={() => {
             distpatch(setCurrentTab("pallet"));
-            naviagate('pallet');
+            naviagate("pallet");
           }}
         >
           <FontAwesomeIcon
@@ -98,10 +108,11 @@ const Sidebar = () => {
         </ButtonCustomized>
 
         <ButtonCustomized
+          disabled={currentWarehouse === -1}
           className={currentTab === "goods" ? "selected" : ""}
           onClick={() => {
             distpatch(setCurrentTab("goods"));
-            naviagate('goods');
+            naviagate("goods");
           }}
         >
           <CategoryIcon sx={{ marginRight: "10px" }} />
@@ -111,10 +122,11 @@ const Sidebar = () => {
         </ButtonCustomized>
 
         <ButtonCustomized
+          disabled={currentWarehouse === -1}
           className={currentTab === "sensor" ? "selected" : ""}
           onClick={() => {
             distpatch(setCurrentTab("sensor"));
-            naviagate('sensor');
+            naviagate("sensor");
           }}
         >
           <SensorsIcon sx={{ marginRight: "10px" }} />
@@ -139,7 +151,7 @@ const Sidebar = () => {
           className={currentTab === "company" ? "selected" : ""}
           onClick={() => {
             distpatch(setCurrentTab("company"));
-            naviagate('company');
+            naviagate("company");
           }}
         >
           <FontAwesomeIcon
@@ -160,7 +172,7 @@ const Sidebar = () => {
           className={currentTab === "agent" ? "selected" : ""}
           onClick={() => {
             distpatch(setCurrentTab("agent"));
-            naviagate('agent');
+            naviagate("agent");
           }}
         >
           <FontAwesomeIcon

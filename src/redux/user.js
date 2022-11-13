@@ -7,10 +7,9 @@ const getLocalStorageToken = (keyName) => {
 };
 
 const setLocalStorageToken = (keyName, value) => {
-  if(value===null){
-    window.localStorage.removeItem(keyName)
-  }
-  else{
+  if (value === null) {
+    window.localStorage.removeItem(keyName);
+  } else {
     window.localStorage.setItem(keyName, value);
   }
 };
@@ -20,6 +19,8 @@ export const userSlice = createSlice({
   initialState: {
     id_user: null,
     token: getLocalStorageToken(accessTokenKeyName),
+    infor: null,
+    company: null,
   },
   reducers: {
     setIdUser: (state, actions) => {
@@ -35,9 +36,21 @@ export const userSlice = createSlice({
         token: actions.payload,
       };
     },
+    setInfor: (state, actions) => {
+      return {
+        ...state,
+        infor: actions.payload,
+      };
+    },
+    setCompany: (state, actions) => {
+      return {
+        ...state,
+        company: actions.payload,
+      };
+    },
   },
 });
 
-export const { setIdUser, setToken } = userSlice.actions;
+export const { setIdUser, setToken, setInfor, setCompany } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,11 +1,20 @@
-import axiosClient from "./axiosClient";
 import qs from "qs";
+import axiosClient from "./axiosClient";
 
 const warehouseAPI = {
   // [GET] agent/:id_agent/warehouse/get_all
   // path_get_all: `[GET] agent/:id_agent/warehouse/get_all`,
   get_all: async (id_agent) => {
     const data = await axiosClient.get(`agent/${id_agent}/warehouse/get_all`);
+    return data;
+  },
+
+  // [GET] agent/:id_agent/warehouse/:id_warehouse/add
+  // path_add: `[GET] agent/:id_agent/warehouse/:id_warehouse/get_infor`,
+  get_infor: async (id_agent, id_warehouse) => {
+    const data = await axiosClient.get(
+      `agent/${id_agent}/warehouse/${id_warehouse}/get_infor`
+    );
     return data;
   },
 
@@ -77,10 +86,10 @@ const warehouseAPI = {
   // [DELETE] agent/:id_agent/warehouse/:id_warehouse/export
   // path_export: `[DELETE] agent/:id_agent/warehouse/:id_warehouse/export`,
   export: async (id_agent, id_warehouse, id_product) => {
-    const body = { id_product };
+    // const body = { id_product };
     const data = await axiosClient.delete(
-      `agent/${id_agent}/warehouse/${id_warehouse}/export`,
-      qs.stringify(body)
+      `agent/${id_agent}/warehouse/${id_warehouse}/export?id_product=${id_product}`
+      // qs.stringify(body)
     );
     return data;
   },

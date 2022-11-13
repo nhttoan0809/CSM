@@ -1,7 +1,11 @@
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import SearchIcon from "@mui/icons-material/Search";
-import { Button, Input } from "@mui/material";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Input } from "@mui/material";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
@@ -155,15 +159,17 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <>
+          {/* Pallet */}
           {title.id === "Pallet" && (
             <>
               <Box>
+                {/* Pallet - Update */}
                 {numSelected > 1 ? (
                   <IconButton disabled={true}>
                     <BorderColorIcon />
                   </IconButton>
                 ) : (
-                  <Tooltip title="Update">
+                  <Tooltip title="Cập nhật pallet">
                     <IconButton
                       onClick={() => {
                         const drawerTab = {
@@ -173,14 +179,14 @@ const EnhancedTableToolbar = (props) => {
                         };
                         dispatch(setDrawerTab(drawerTab));
                         toggleDrawer();
-                        // console.log("selected: ", selected);
                       }}
                     >
                       <BorderColorIcon />
                     </IconButton>
                   </Tooltip>
                 )}
-                <Tooltip title="Remove">
+                {/* Pallet - Remove */}
+                <Tooltip title="Xóa bỏ pallet">
                   <IconButton
                     onClick={() => {
                       const drawerTab = {
@@ -190,24 +196,26 @@ const EnhancedTableToolbar = (props) => {
                       };
                       dispatch(setDrawerTab(drawerTab));
                       toggleDrawer();
-                      // console.log("selected: ", selected);
                     }}
                   >
-                    <RemoveCircleIcon />
+                    <DeleteForeverIcon />
                   </IconButton>
                 </Tooltip>
               </Box>
             </>
           )}
+
+          {/* Goods */}
           {title.id === "Goods" && (
             <>
               <Box>
+                {/* Goods - Update */}
                 {numSelected > 1 ? (
                   <IconButton disabled={true}>
                     <BorderColorIcon />
                   </IconButton>
                 ) : (
-                  <Tooltip title="Update">
+                  <Tooltip title="Cập nhật hàng">
                     <IconButton
                       onClick={() => {
                         const drawerTab = {
@@ -217,16 +225,33 @@ const EnhancedTableToolbar = (props) => {
                         };
                         dispatch(setDrawerTab(drawerTab));
                         toggleDrawer();
-                        // console.log("selected: ", selected);
                       }}
                     >
                       <BorderColorIcon />
                     </IconButton>
                   </Tooltip>
                 )}
+                {/* Goods - Export */}
+                <Tooltip title="Xuất hàng">
+                  <IconButton
+                    onClick={() => {
+                      const drawerTab = {
+                        type: "Goods",
+                        action: "Export",
+                        data: selected,
+                      };
+                      dispatch(setDrawerTab(drawerTab));
+                      toggleDrawer();
+                    }}
+                  >
+                    <LogoutIcon />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </>
           )}
+
+          {/* Sensor */}
           {title.id === "Sensor" && (
             <>
               <Box>
@@ -255,11 +280,139 @@ const EnhancedTableToolbar = (props) => {
               </Box>
             </>
           )}
+
+          {/* Agent */}
+          {title.id === "Agent" && (
+            <>
+              <Box>
+                {/* Warehouse - Add a warehouse */}
+                {numSelected > 1 ? (
+                  <IconButton disabled={true}>
+                    <BorderColorIcon />
+                  </IconButton>
+                ) : (
+                  <Tooltip title="Thêm kho">
+                    <IconButton
+                      onClick={() => {
+                        const drawerTab = {
+                          type: "Warehouse",
+                          action: "Add",
+                          data: selected,
+                        };
+                        dispatch(setDrawerTab(drawerTab));
+                        toggleDrawer();
+                      }}
+                    >
+                      <AddHomeWorkIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {/* Warehouse - Delete warehouse */}
+                {numSelected > 1 ? (
+                  <IconButton disabled={true}>
+                    <BorderColorIcon />
+                  </IconButton>
+                ) : (
+                  <Tooltip title="Xóa kho">
+                    <IconButton
+                      onClick={() => {
+                        const drawerTab = {
+                          type: "Warehouse",
+                          action: "Delete",
+                          data: selected,
+                        };
+                        dispatch(setDrawerTab(drawerTab));
+                        toggleDrawer();
+                      }}
+                    >
+                      <RemoveCircleIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {/* Agent - Delete warehouse */}
+                {numSelected > 1 ? (
+                  <IconButton disabled={true}>
+                    <BorderColorIcon />
+                  </IconButton>
+                ) : (
+                  <Tooltip title="Xóa đại lý">
+                    <IconButton
+                      onClick={() => {
+                        const drawerTab = {
+                          type: "Agent",
+                          action: "Delete",
+                          data: selected,
+                        };
+                        dispatch(setDrawerTab(drawerTab));
+                        toggleDrawer();
+                      }}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
+            </>
+          )}
         </>
       ) : (
         // <Box sx={{display: 'flex'}}>
         <>
-          <Tooltip title="Filter">
+          {title.id === "Pallet" && (
+            <Tooltip title="Nhập pallet">
+              <IconButton
+                onClick={() => {
+                  const drawerTab = {
+                    type: "Pallet",
+                    action: "Import",
+                    data: null,
+                  };
+                  dispatch(setDrawerTab(drawerTab));
+                  toggleDrawer();
+                }}
+              >
+                <LoginIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {title.id === "Goods" && (
+            <Tooltip title="Nhập hàng">
+              <IconButton
+                onClick={() => {
+                  const drawerTab = {
+                    type: "Goods",
+                    action: "Import",
+                    data: null,
+                  };
+                  dispatch(setDrawerTab(drawerTab));
+                  toggleDrawer();
+                }}
+              >
+                <LoginIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {title.id === "Agent" && (
+            <Tooltip title="Thêm đại lý">
+              <IconButton
+                onClick={() => {
+                  const drawerTab = {
+                    type: "Agent",
+                    action: "Add",
+                    data: null,
+                  };
+                  dispatch(setDrawerTab(drawerTab));
+                  toggleDrawer();
+                }}
+              >
+                <AddBusinessIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+
+          {/* <Tooltip title="Filter">
             <IconButton
               onClick={() => {
                 setSearchable(!searchable);
@@ -267,7 +420,7 @@ const EnhancedTableToolbar = (props) => {
             >
               <SearchIcon />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Input sx={{ transition: ".5s ease", flex: searchable ? 1 : 0 }} />
         </>
         // </Box>
@@ -280,38 +433,6 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-// const GenerateDrawerComponent = () => {
-//   const { type, action, data } = useSelector((state) => state.drawer.drawerTab);
-
-//   if (type === "Pallet") {
-//     if(action === "Update"){
-//       return (
-//         <>
-//           {console.log("data: ", data)}
-//           <Typography>Update Pallet nek </Typography>
-//         </>
-//       );
-//     }
-//     else if(action === "Delete"){
-//       return (
-//         <>
-//           {console.log("data: ", data)}
-//           <Typography>Delete Pallet nek </Typography>
-//         </>
-//       );
-//     }
-//   } else if (type === "Goods") {
-//     if(action === "Update"){
-//       return (
-//         <>
-//           {console.log("data: ", data)}
-//           <Typography>Update Hang hoa nek </Typography>
-//         </>
-//       );
-//     }
-//   }
-// };
-
 export default function EnhancedTable(props) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -321,8 +442,21 @@ export default function EnhancedTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(6);
 
   const expandDrawer = useSelector((state) => state.drawer.expandDrawer);
+  const { headCells, rows, title } = props;
+
+  React.useEffect(() => {
+    setSelected([]);
+  }, [rows]);
 
   const dispatch = useDispatch();
+
+  const currentWarehouse = useSelector(
+    (state) => state.warehouse.currentWarehouse
+  );
+  const currentAgent = useSelector((state) => state.agent.currentAgent);
+  React.useEffect(() => {
+    setSelected([]);
+  }, [currentWarehouse, currentAgent]);
 
   const toggleDrawer = (state) => () => {
     if (!state) {
@@ -331,8 +465,6 @@ export default function EnhancedTable(props) {
     }
     dispatch(setExpandDrawer(state));
   };
-
-  const { headCells, rows, title } = props;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -395,10 +527,10 @@ export default function EnhancedTable(props) {
           onOpen={toggleDrawer(true)}
         >
           <Box
-            sx={{ minWidth: 450, padding: "1rem 2rem" }}
+            sx={{ minWidth: "25rem", padding: "1rem 2rem" }}
             role="presentation"
-          // onClick={toggleDrawer(false)}
-          // onKeyDown={toggleDrawer(false)}
+            // onClick={toggleDrawer(false)}
+            // onKeyDown={toggleDrawer(false)}
           >
             <GeneratorDrawer />
           </Box>
@@ -412,98 +544,130 @@ export default function EnhancedTable(props) {
           selected={selected}
           toggleDrawer={toggleDrawer(true)}
         />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-              headCells={headCells}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+        {rows.length > 0 ? (
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? "small" : "medium"}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+                headCells={headCells}
+              />
+              <TableBody>
+                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row[Object.keys(row)[0]]);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row[Object.keys(row)[0]]);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      sx={{ "&:hover": { cursor: "pointer" } }}
-                      onClick={(event) =>
-                        handleClick(event, row[Object.keys(row)[0]])
-                      }
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row[Object.keys(row)[0]]}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-
-                      {Object.keys(row).map((key, index) => {
-                        let data = row[key];
-                        if (typeof data === "boolean") {
-                          if (data) {
-                            data = "Su dung";
-                          } else {
-                            data = "Co san";
-                          }
+                    return (
+                      <TableRow
+                        hover
+                        sx={{ "&:hover": { cursor: "pointer" } }}
+                        onClick={(event) =>
+                          handleClick(event, row[Object.keys(row)[0]])
                         }
-                        return index === 0 ? (
-                          <Tooltip title={data} key={index}>
-                            <TableCell
-                              component="th"
-                              id={labelId}
-                              scope="row"
-                              padding="none"
-                              sx={{
-                                maxWidth: '4rem',
-                                overflow: 'hidden',
-                              }}
-                            >
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row[Object.keys(row)[0]]}
+                        selected={isItemSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+
+                        {Object.keys(row).map((key, index) => {
+                          let data = row[key];
+                          if (key === "warehouseList") {
+                            return (
+                              <TableCell key={index} align="right">
+                                {data.map((warehouse, ind) => (
+                                  <p key={ind}>
+                                    {/* {row["_id"] === currentAgent ? (
+                                      <a
+                                        href="#"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          e.preventDefault();
+                                          console.log(row["_id"]);
+                                          console.log(warehouse.warehouse_id);
+                                          dispatch(
+                                            setCurrentWarehouse(
+                                              warehouse.warehouse_id
+                                            )
+                                          );
+                                        }}
+                                      >{`${warehouse.name}`}</a>
+                                    ) : ( */}
+                                    {warehouse.name}
+                                    {/* )} */}
+                                  </p>
+                                ))}
+                              </TableCell>
+                            );
+                          }
+                          if (typeof data === "boolean") {
+                            if (data) {
+                              data = "Su dung";
+                            } else {
+                              data = "Co san";
+                            }
+                          }
+                          return index === 0 ? (
+                            <Tooltip title={data} key={index}>
+                              <TableCell
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                                sx={{
+                                  maxWidth: "4rem",
+                                  overflow: "hidden",
+                                }}
+                              >
+                                {data}
+                              </TableCell>
+                            </Tooltip>
+                          ) : (
+                            <TableCell key={index} align="right">
                               {data}
                             </TableCell>
-                          </Tooltip>
-                        ) : (
-                          <TableCell key={index} align="right">
-                            {data}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <h2>Không có sẵn {title.name.toLowerCase()} !!!</h2>
+        )}
         <TablePagination
           rowsPerPageOptions={[6, 12, 20]}
           component="div"

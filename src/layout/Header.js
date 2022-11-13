@@ -34,6 +34,9 @@ const convertWarehouseList = (warehouseList) => {
 };
 
 const Header = () => {
+
+  const inforUser = useSelector(state => state.user.infor)
+
   const dispatch = useDispatch();
 
   const currentAgent = useSelector(state => state.agent.currentAgent)
@@ -110,7 +113,7 @@ const Header = () => {
         />
       </div>
       <div>
-        <Account name="Toan Nguyen" />
+        <Account name={inforUser?inforUser.name:"Error Error"} menu={true}/>
       </div>
     </div>
   );

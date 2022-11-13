@@ -2,7 +2,9 @@ import styled from "@emotion/styled";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setDrawerTab, setExpandDrawer } from "../../../redux/drawer";
+import * as api from "./../../../api";
 
 const TextFieldCustomized = styled((props) => {
   return <TextField variant="outlined" {...props}></TextField>;
@@ -10,23 +12,33 @@ const TextFieldCustomized = styled((props) => {
   margin: "10px 0",
 }));
 
+const isWarning = (newPalletList) => {
+  let isWarning = false;
+  newPalletList.forEach((pallet) => {
+    if (pallet.is_used) {
+      isWarning = true;
+    }
+  });
+  return isWarning;
+};
+
 const DeletePallet = (props) => {
-  const id_ObjectList = props.data;
+  const agent_id = useSelector((state) => state.agent.currentAgent);
+  const warehouse_id = useSelector((state) => state.warehouse.currentWarehouse);
   const palletList = useSelector((state) => state.pallet.palletList);
 
+  const id_ObjectList = props.data;
   const newPalletList = [];
 
   id_ObjectList.forEach((id) => {
-    newPalletList.push(
-      palletList.filter((pallet) => pallet.pallet_id === id)[0]
-    );
+    newPalletList.push(palletList.filter((pallet) => pallet._id === id)[0]);
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <>
-      {/* {console.log("pallet: ", newPalletList)} */}
       <Box
         sx={{
           height: "100%",
@@ -38,37 +50,61 @@ const DeletePallet = (props) => {
       >
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           {newPalletList.map((pallet, index) => (
-            <Box key={index}>
-              <Typography variant="h5">{pallet.pallet_id}</Typography>
+            <Box key={index} sx={{ marginBottom: "1.5rem" }}>
+              <Typography variant="h5">ID: {pallet._id}</Typography>
               <TextFieldCustomized
-                variant='standard' 
-                label="Trang thai" 
-                error={pallet.is_used?true:false}
+                variant="standard"
+                label="Trang thai"
+                color="warning"
+                error={pallet.is_used ? true : false}
                 disabled
-                value={pallet.is_used?'Dang dung':'Co san'}  
+                value={pallet.is_used ? "Dang su dung" : "Co san"}
+                helperText={
+                  pallet.is_used
+                    ? "Xoa pallet nay se go bo cac hang hoa co tren pallet"
+                    : "Co the xoa"
+                }
               />
             </Box>
           ))}
-
-          {/* <Typography variant="h4">{pallet.pallet_id}</Typography>
-          <TextFieldCustomized label="ID Kho" value={pallet.warehouse_id}/>
-          <TextFieldCustomized label="Mo ta" value={pallet.description}/>
-          <TextFieldCustomized label="Trang thai" value={pallet.is_used}/>
-          <TextFieldCustomized label="Ngay nhap" value={pallet.import_date}/>
-          <TextFieldCustomized label="Ngay SD" value={pallet.storage_start_data}/>
-          <TextFieldCustomized label="Vi tri" value={pallet.position}/> */}
         </Box>
         <Box
           sx={{ margin: "1rem", display: "flex", justifyContent: "flex-end" }}
         >
           <Button
+            sx={{ marginRight: "1rem" }}
             variant="outlined"
             onClick={() => {
               dispatch(setDrawerTab({ type: "", action: "", data: "" }));
               dispatch(setExpandDrawer(false));
             }}
           >
-            Cancel
+            Huy
+          </Button>
+          <Button
+            // disabled={!isWarning(newPalletList)}
+            variant="outlined"
+            color={isWarning(newPalletList) ? "warning" : "success"}
+            onClick={() => {
+              newPalletList.forEach(async (pallet) => {
+                let isError = false;
+
+                await api.palletAPI
+                  .deleta_pallet(agent_id, warehouse_id, pallet._id)
+                  .then((data) => {
+                    if (data.status === "Successfully") {
+                    } else {
+                      isError = true;
+                      // Handle update fail
+                    }
+                  });
+              });
+              dispatch(setDrawerTab({ type: "", action: "", data: "" }));
+              dispatch(setExpandDrawer(false));
+              navigate("/pallet");
+            }}
+          >
+            Xoa
           </Button>
         </Box>
       </Box>

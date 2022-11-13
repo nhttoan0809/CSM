@@ -3,6 +3,12 @@ import qs from "qs";
 
 const agentAPI = {
 
+  // [GET] agent/:id_agent/getInfor
+  get_infor: async (id_agent) => {
+    const data = await axiosClient.get(`agent/${id_agent}/getInfor`)
+    return data;
+  },
+
   // [GET] agent/get_all
   get_all: async () => {
     const data = await axiosClient.get("agent/get_all");
@@ -11,11 +17,10 @@ const agentAPI = {
 
   // [POST] agent/add
   // path_add_agent: "[POST] agent/add",
-  add: async (agent_name, agent_owner, id_company) => {
+  add: async (agent_name, agent_owner) => {
     const body = {
       agent_name,
       agent_owner,
-      id_company,
     };
     const data = await axiosClient.post("agent/add", qs.stringify(body));
     return data;
