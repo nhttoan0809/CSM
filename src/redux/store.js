@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './user'
 import agentReducer from './agent'
-import warehouseReducer from './warehouse'
+import drawerReducer from './drawer'
+import iotAccountReducer from './iotAccount'
 import palletReducer from './pallet'
+import pallet_templateReducer from './pallet_template'
 import productReducer from './product'
 import sensorReducer from './sensor'
 import tabReducer from './tabs'
-import drawerReducer from './drawer'
-import pallet_templateReducer from './pallet_template'
+import userReducer from './user'
+import warehouseReducer from './warehouse'
+import stationReducer from './station'
 
 export default configureStore({
     reducer: {
@@ -20,5 +22,8 @@ export default configureStore({
         tab: tabReducer,
         drawer: drawerReducer,
         pallet_template: pallet_templateReducer,
+        pallet_template: pallet_templateReducer,
+        iotAccount: iotAccountReducer,
+        station: stationReducer,
     },
 })

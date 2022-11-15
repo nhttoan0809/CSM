@@ -1,47 +1,39 @@
-import axiosClient from "./axiosClient";
 import qs from "qs";
+import axiosClient from "./axiosClient";
 
 const sensorAPI = {
-  // [GET] agent/:id_agent/warehouse/:id_warehouse/sensor/get_all
-  path_get_all: `[GET] agent/:id_agent/warehouse/:id_warehouse/sensor/get_all`,
-  get_all: async (id_agent, id_warehouse) => {
+  get_all: async (id_agent, id_warehouse, id_iot_account, id_station) => {
     const data = await axiosClient.get(
-      `agent/${id_agent}/warehouse/${id_warehouse}/sensor/get_all`
+      `agent/${id_agent}/warehouse/${id_warehouse}/iot_account/${id_iot_account}/station/${id_station}/sensor/get_all`
     );
     return data;
   },
 
-  // [POST] agent/:id_agent/warehouse/:id_warehouse/sensor/:id_sensor/assign
-  path_assign: `[POST] agent/:id_agent/warehouse/:id_warehouse/sensor/:id_sensor/assign`,
-  assign: async (id_agent, id_warehouse, id_sensor, position) => {
+  get_data: async (id_agent, id_warehouse, id_iot_account, id_station, id_sensor) => {
+    const data = await axiosClient.get(
+      `agent/${id_agent}/warehouse/${id_warehouse}/iot_account/${id_iot_account}/station/${id_station}/sensor/${id_sensor}/get_data`
+    );
+    return data;
+  },
+
+  set_status: async (id_agent, id_warehouse, id_iot_account, id_station, id_sensor, status) => {
     const body = {
-      position,
+      status,
     };
     const data = await axiosClient.post(
-      `agent/${id_agent}/warehouse/${id_warehouse}/sensor/${id_sensor}/assign`,
+      `agent/${id_agent}/warehouse/${id_warehouse}/iot_account/${id_iot_account}/station/${id_station}/sensor/${id_sensor}/set_status`,
       qs.stringify(body)
     );
     return data;
   },
 
-  // [POST] agent/:id_agent/warehouse/:id_warehouse/sensor/:id_sensor/update_position
-  path_update_position: `[POST] agent/:id_agent/warehouse/:id_warehouse/sensor/:id_sensor/update_position`,
-  update_position: async (id_agent, id_warehouse, id_sensor, position) => {
+  set_position: async (id_agent, id_warehouse, id_iot_account, id_station, id_sensor, position) => {
     const body = {
       position,
     };
     const data = await axiosClient.post(
-      `agent/${id_agent}/warehouse/${id_warehouse}/sensor/${id_sensor}/update_position`,
+      `agent/${id_agent}/warehouse/${id_warehouse}/iot_account/${id_iot_account}/station/${id_station}/sensor/${id_sensor}/set_position`,
       qs.stringify(body)
-    );
-    return data;
-  },
-
-  // [DELETE] agent/:id_agent/warehouse/:id_warehouse/sensor/:id_sensor/remove
-  path_remove: `[DELETE] agent/:id_agent/warehouse/:id_warehouse/sensor/:id_sensor/remove`,
-  remove: async (id_agent, id_warehouse, id_sensor) => {
-    const data = await axiosClient.delete(
-      `agent/${id_agent}/warehouse/${id_warehouse}/sensor/${id_sensor}/remove`
     );
     return data;
   },

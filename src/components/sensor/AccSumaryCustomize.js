@@ -32,7 +32,7 @@ const AccSumaryCustomize = ({ title, onUnConnect }) => {
         },
       }}
     >
-      <Typography>Tai khoan IOT: {title}</Typography>
+      <Typography variant="h6">Tai khoan IOT: {title}</Typography>
       <div>
         <Button onClick={handleClick}>
           <SettingsIcon />

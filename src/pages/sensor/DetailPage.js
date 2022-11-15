@@ -1,38 +1,27 @@
-import styled from "@emotion/styled";
 import {
+  Box,
   Button,
   Menu,
   MenuItem,
   Paper,
-  SwipeableDrawer,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  Box,
   TextField,
+  Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import AddDrawer from "../../components/AddDrawer";
 import AccDetailscustomize from "../../components/sensor/AccDetailscustomize";
 import AccSumaryCustomize from "../../components/sensor/AccSumaryCustomize";
+import { setIotAccountList } from "../../redux/iotAccount";
+import * as api from "./../../api";
 import AccCustomize from "./../../components/sensor/AccCustomize";
-
-function createData(id, position, status) {
-  return { id, position, status };
-}
-
-const rows = [
-  createData(123, `--/--/--`, `khong kich hoat`),
-  createData(456, `0:4:4`, `su dung`),
-  createData(789, `--/--/--`, `san sang`),
-];
 
 const MenuCustomize = ({ title, toggleText, onClick }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -46,20 +35,32 @@ const MenuCustomize = ({ title, toggleText, onClick }) => {
 
   return (
     <>
-      <div onClick={handleClick}>{title}</div>
+      <div
+        onClick={handleClick}
+        style={{
+          color:
+            title === "Sẵn sàng"
+              ? ""
+              : title === "Đang sử dụng"
+              ? "green"
+              : "red",
+        }}
+      >
+        {title}
+      </div>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem
           onClick={(e) => {
-            onClick();
+            onClick(toggleText);
             handleClose(e);
           }}
         >
           <Typography
-          // sx={{
-          //   "&:hover": {
-          //     color: "red",
-          //   },
-          // }}
+            sx={{
+              "&:hover": {
+                color: toggleText === "Kích hoạt" ? "green" : "red",
+              },
+            }}
           >
             {toggleText}
           </Typography>
@@ -69,74 +70,164 @@ const MenuCustomize = ({ title, toggleText, onClick }) => {
   );
 };
 
-const GenerateSensorTable = ({ rows }) => {
+const GenerateSensorTable = ({ idIotAccount }) => {
+  const id_agent = useSelector((state) => state.agent.currentAgent);
+  const id_warehouse = useSelector((state) => state.warehouse.currentWarehouse);
+
+  const [stationList, setStationList] = useState([]);
+
+  useEffect(() => {
+    api.stationAPI
+      .get_all(id_agent, id_warehouse, idIotAccount)
+      .then((res) => {
+        return res.status === "Successfully" ? res.data : [];
+      })
+      .then((data) => {
+        setStationList(data);
+      });
+  }, [id_agent, id_warehouse, idIotAccount]);
+
+  const dispatch = useDispatch();
+
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">ID Cảm biến</TableCell>
-              <TableCell align="center">Vị trí</TableCell>
-              <TableCell align="center">Trạng thái</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align="center">
-                  {row.id}
-                </TableCell>
-                <TableCell align="center">{row.position}</TableCell>
-                <TableCell align="center">
-                  <Button>
-                    <MenuCustomize
-                      title={row.status}
-                      toggleText={`kich hoat`}
-                      handleClick={() => console.log("click to active")}
-                    />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ padding: "0 1rem" }}>
+        {stationList.length === 0 ? (
+          <Typography sx={{ margin: "1rem 0" }}>
+            Tai khoan nay hien khong co tram cam bien nao!!!
+          </Typography>
+        ) : (
+          <>
+            {stationList.map((station, ind) => {
+              return (
+                <div key={ind}>
+                  <Typography variant="h6" sx={{ textAlign: "left" }}>
+                    Trạm: {station._id}
+                  </Typography>
+                  <TableContainer
+                    component={Paper}
+                    sx={{
+                      padding: "0 1rem",
+                      margin: "1rem 0",
+                      boxShadow:
+                        "0px 2px 1px -1px rgb(0 0 0 / 50%), 0px 1px 1px 0px rgb(0 0 0 / 0%), 0px 1px 3px 0px rgb(0 0 0 / 50%)",
+                    }}
+                  >
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">ID Cảm biến</TableCell>
+                          <TableCell align="center">Vị trí</TableCell>
+                          <TableCell align="center">Trạng thái</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <GenerateTableBody
+                        idIotAccount={idIotAccount}
+                        idStation={station._id}
+                      />
+                    </Table>
+                  </TableContainer>
+                </div>
+              );
+            })}
+          </>
+        )}
+      </Box>
     </>
   );
 };
 
-const SensorDetailPage = () => {
-  const idWarehouse = useSelector((state) => state.warehouse.currentWarehouse);
-  // const rows = useSelector((state) => state.sensor.sensorList);
-  // const dispatch = useDispatch();
+const GenerateTableBody = ({ idIotAccount, idStation }) => {
+  const id_agent = useSelector((state) => state.agent.currentAgent);
+  const id_warehouse = useSelector((state) => state.warehouse.currentWarehouse);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // api.s
-    // fetch("http://localhost:5000/test_data/getAllSensor")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     // console.log("data: ", data)
-    //     const payloadCustomize = data.data.map((sensor) => (
-    //       {
-    //         "sensor_id": sensor.sensor_id,
-    //         "data": sensor.data,
-    //         "is_activated": sensor.is_activated,
-    //         "position": sensor.position,
-    //     }
-    //     ))
-    //     dispatch(setSensorList(payloadCustomize))
-    //   });
-  }, []);
+    api.sensorAPI
+      .get_all(id_agent, id_warehouse, idIotAccount, idStation)
+      .then((res) => {
+        if (res.status === "Successfully") {
+          setRows(res.data);
+        } else {
+          setRows([]);
+        }
+      });
+  }, [idIotAccount, idStation]);
 
-  const [expandDrawer, setExpandDrawer] = useState(false);
+  return (
+    <>
+      {rows.length > 0 && (
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row._id}
+              sx={{
+                "&:last-child td, &:last-child th": { border: 0 },
+                // "& .MuiTableCell-root": { padding: "0.5rem" },
+              }}
+            >
+              <TableCell component="th" scope="row" align="center">
+                {row._id}
+              </TableCell>
+              <TableCell align="center">{row.position ?? `--/--/--`}</TableCell>
+              <TableCell align="center">
+                <Button size="small">
+                  <MenuCustomize
+                    title={
+                      // (row.status===1)?'Đang sử dụng':(row.status===0?'Sẵn sàng':'Không thể sử dụng')
+                      row.status ? "Đang sử dụng" : "Sẵn sàng"
+                      // `Sẵn sàng`
+                    }
+                    toggleText={
+                      row.status ? `Gỡ bỏ` : `Kích hoạt`
+                      // `Kích hoạt`
+                    }
+                    onClick={(message) => {
+                      api.sensorAPI
+                        .set_status(
+                          id_agent,
+                          id_warehouse,
+                          idIotAccount,
+                          idStation,
+                          row._id,
+                          message === "Gỡ" ? 0 : 1
+                        )
+                        .then((res) => {
+                          if (res.status === "Successfully") {
+                            api.sensorAPI
+                              .get_all(
+                                id_agent,
+                                id_warehouse,
+                                idIotAccount,
+                                idStation
+                              )
+                              .then((res) => {
+                                if (res.status === "Successfully") {
+                                  setRows(res.data);
+                                } else {
+                                  setRows([]);
+                                }
+                              });
+                          }
+                        });
+                    }}
+                  />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      )}
+    </>
+  );
+};
 
-  if (idWarehouse === -1) {
-    return <Navigate to="/agent" replace={true} />;
-  }
+const AddIOTAccount = ({ idAgent, idWarehouse }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isErrorAccount, setIsErrorAccount] = useState("");
+
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -144,8 +235,26 @@ const SensorDetailPage = () => {
         text={`+`}
         title={`Thêm tài khoản IOT`}
         handleFunc={async () => {
-          // await fetch();
-          console.log("handle them iot account");
+          const isExpand = await api.iotAccountAPI
+            .add(idAgent, idWarehouse, username, password)
+            .then(async (res) => {
+              if (res.status === "Successfully") {
+                const respond = await api.iotAccountAPI.get_all(
+                  idAgent,
+                  idWarehouse
+                );
+                if (respond.status === "Successfully") {
+                  dispatch(setIotAccountList(respond.data));
+                } else {
+                  dispatch(setIotAccountList([]));
+                }
+                return false;
+              } else {
+                setIsErrorAccount(res.message);
+                return true;
+              }
+            });
+          return isExpand;
         }}
       >
         <Box
@@ -161,6 +270,11 @@ const SensorDetailPage = () => {
             variant="standard"
             inputProps={{ style: { textAlign: "center" } }}
             sx={{ flex: 1 }}
+            value={username}
+            onChange={(e) => {
+              setIsErrorAccount("");
+              setUsername(e.target.value);
+            }}
           />
         </Box>
         <Box
@@ -177,37 +291,78 @@ const SensorDetailPage = () => {
             type="password"
             inputProps={{ style: { textAlign: "center" } }}
             sx={{ flex: 1 }}
+            value={password}
+            onChange={(e) => {
+              setIsErrorAccount("");
+              setPassword(e.target.value);
+            }}
           />
         </Box>
+        {isErrorAccount && <Typography>{`${isErrorAccount}!!!`}</Typography>}
       </AddDrawer>
+    </>
+  );
+};
 
-      <AccCustomize>
-        <AccSumaryCustomize
-          title={`Thanh Toan`}
-          onUnConnect={() => console.log("handle unConnect")}
-        />
-        <AccDetailscustomize>
-          <GenerateSensorTable rows={rows} />
-        </AccDetailscustomize>
-      </AccCustomize>
-      <AccCustomize>
-        <AccSumaryCustomize
-          title={`Thanh Toan`}
-          onUnConnect={() => console.log("handle unConnect")}
-        />
-        <AccDetailscustomize>
-          <GenerateSensorTable rows={rows} />
-        </AccDetailscustomize>
-      </AccCustomize>
-      <AccCustomize>
-        <AccSumaryCustomize
-          title={`Thanh Toan`}
-          onUnConnect={() => console.log("handle unConnect")}
-        />
-        <AccDetailscustomize>
-          <GenerateSensorTable rows={rows} />
-        </AccDetailscustomize>
-      </AccCustomize>
+const SensorDetailPage = () => {
+  const idAgent = useSelector((state) => state.agent.currentAgent);
+  const idWarehouse = useSelector((state) => state.warehouse.currentWarehouse);
+  const iotAccountList = useSelector(
+    (state) => state.iotAccount.iotAccountList
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (idWarehouse !== -1) {
+      api.iotAccountAPI.get_all(idAgent, idWarehouse).then((data) => {
+        if (data.status === "Successfully") {
+          dispatch(setIotAccountList(data.data));
+        } else {
+          dispatch(setIotAccountList([]));
+        }
+      });
+    }
+  }, [idAgent, idWarehouse, dispatch]);
+
+  if (idWarehouse === -1) {
+    return <Navigate to="/agent" replace={true} />;
+  }
+
+  return (
+    <>
+      <AddIOTAccount idAgent={idAgent} idWarehouse={idWarehouse} />
+
+      {iotAccountList.map((iotAccount, ind) => {
+        return (
+          <AccCustomize key={ind}>
+            <AccSumaryCustomize
+              title={iotAccount.iot_username}
+              onUnConnect={() =>
+                api.iotAccountAPI
+                  .remove(idAgent, idWarehouse, iotAccount.iotAccount_id)
+                  .then((res) => {
+                    if (res.status === "Successfully") {
+                      api.iotAccountAPI
+                        .get_all(idAgent, idWarehouse)
+                        .then((data) => {
+                          if (data.status === "Successfully") {
+                            dispatch(setIotAccountList(data.data));
+                          } else {
+                            dispatch(setIotAccountList([]));
+                          }
+                        });
+                    } else {
+                      console.log("Xu ly remove iot account khong thanh cong");
+                    }
+                  })
+              }
+            />
+            <AccDetailscustomize>
+              <GenerateSensorTable idIotAccount={iotAccount.iotAccount_id} />
+            </AccDetailscustomize>
+          </AccCustomize>
+        );
+      })}
     </>
   );
 };

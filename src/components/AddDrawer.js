@@ -46,8 +46,8 @@ const AddDrawer = ({ text, title, children, handleFunc }) => {
             <Button
               variant="outlined"
               onClick={async () => {
-                await handleFunc();
-                setExpandDrawer(false);
+                const isExpand = await handleFunc();
+                setExpandDrawer(isExpand);
               }}
             >
               Them
@@ -77,7 +77,7 @@ const AddDrawer = ({ text, title, children, handleFunc }) => {
           }}
           onClick={() => setExpandDrawer(true)}
         >
-          {text}
+          <h3>{text}</h3>
         </Button>
       </div>
     </>
