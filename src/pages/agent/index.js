@@ -108,15 +108,11 @@ const AgentPage = () => {
       <Box
         sx={{ width: "100%", padding: "0 1.5rem 0 1rem", marginTop: "1rem" }}
       >
-        {agentList.length > 0 ? (
-          <EnhancedTable
-            title={{ id: `Agent`, name: `Dai ly` }}
-            headCells={headCells}
-            rows={agentListConverted}
-          />
-        ) : (
-          <h3 style={{ width: "100%" }}>Không có sẵn đại lý !!!</h3>
-        )}
+        <EnhancedTable
+          title={{ id: `Agent`, name: `Dai ly` }}
+          headCells={headCells}
+          rows={agentListConverted}
+        />
       </Box>
     </>
   );

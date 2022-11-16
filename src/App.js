@@ -13,6 +13,7 @@ import GoodsConfigurationPage from "./pages/goods/ConfigurationPage";
 import GoodsDetailPage from "./pages/goods/DetailPage";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import PalletPage from "./pages/pallet";
 import PalletConfigurationPage from "./pages/pallet/ConfigurationPage";
 import PalletDetailPage from "./pages/pallet/DetailPage";
@@ -30,6 +31,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/" element={<Home />}>
           <Route index element={<IndexRoute />} />
           <Route path="warehouse" element={<WarehousePage />}>
