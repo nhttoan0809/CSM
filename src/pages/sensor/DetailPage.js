@@ -190,7 +190,7 @@ const GenerateTableBody = ({ idIotAccount, idStation }) => {
                           idIotAccount,
                           idStation,
                           row._id,
-                          message === "Gỡ" ? 0 : 1
+                          message === `Gỡ bỏ` ? 0 : 1
                         )
                         .then((res) => {
                           if (res.status === "Successfully") {

@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { setCurrentTab } from "../../redux/tabs";
 import { setCompany, setInfor } from "../../redux/user";
-import Account from "./../../components/Account";
 import * as api from "./../../api";
+import Account from "./../../components/Account";
 
 const CompanyPage = () => {
   const infor = useSelector((state) => state.user.infor);
@@ -12,19 +12,22 @@ const CompanyPage = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    api.authAPI.getInfor().then((data) => {
+    const fetchcontinue = api.authAPI.getInfor().then((data) => {
       if (data.status === "Successfully") {
         dispatch(setInfor(data.data));
       } else {
         dispatch(setInfor(null));
       }
     });
-    api.companyAPI.getInfor().then((data) => {
-      if (data.status === "Successfully") {
-        dispatch(setCompany(data.data));
-      } else {
-        dispatch(setCompany(data.data));
-      }
+    fetchcontinue.then(() => {
+      api.companyAPI.getInfor().then((data) => {
+        console.log("company: ", data);
+        if (data.status === "Successfully") {
+          dispatch(setCompany(data.data));
+        } else {
+          dispatch(setCompany(null));
+        }
+      });
     });
   }, []);
 
@@ -78,7 +81,7 @@ const CompanyPage = () => {
               }}
             >
               <Typography variant="h5" sx={{ minWidth: "10rem" }}>
-                Tên công ty:{" "}
+                Tên công ty:
               </Typography>
               <Typography sx={{ fontSize: "1.5rem", textAlign: "left" }}>
                 {company.company_name}
@@ -92,7 +95,7 @@ const CompanyPage = () => {
               }}
             >
               <Typography variant="h5" sx={{ minWidth: "10rem" }}>
-                Địa chỉ:{" "}
+                Địa chỉ:
               </Typography>
               <Typography sx={{ fontSize: "1.5rem", textAlign: "left" }}>
                 {company.company_address}

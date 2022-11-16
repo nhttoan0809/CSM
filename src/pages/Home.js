@@ -17,10 +17,10 @@ const Home = () => {
   } else {
     if (id_user === null) {
       const res = api.authAPI.reLogin();
-      res.then((data) => {
+      res.then(async (data) => {
         if (data.status === "Successfully") {
-          dispatch(setIdUser(data.data.user_id));
-          api.authAPI.getInfor().then((data) => {
+          dispatch(setIdUser(data.data.id_user));
+          await api.authAPI.getInfor().then((data) => {
             if (data.status === "Successfully") {
               dispatch(setInfor(data.data));
             } else {
@@ -28,10 +28,11 @@ const Home = () => {
             }
           });
           api.companyAPI.getInfor().then((data) => {
+            console.log("company: ", data);
             if (data.status === "Successfully") {
               dispatch(setCompany(data.data));
             } else {
-              dispatch(setCompany(data.data));
+              dispatch(setCompany(null));
             }
           });
         } else {

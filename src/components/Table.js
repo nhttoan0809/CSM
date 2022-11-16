@@ -288,7 +288,7 @@ const EnhancedTableToolbar = (props) => {
                 {/* Warehouse - Add a warehouse */}
                 {numSelected > 1 ? (
                   <IconButton disabled={true}>
-                    <BorderColorIcon />
+                    <AddHomeWorkIcon />
                   </IconButton>
                 ) : (
                   <Tooltip title="Thêm kho">
@@ -311,7 +311,7 @@ const EnhancedTableToolbar = (props) => {
                 {/* Warehouse - Delete warehouse */}
                 {numSelected > 1 ? (
                   <IconButton disabled={true}>
-                    <BorderColorIcon />
+                    <RemoveCircleIcon />
                   </IconButton>
                 ) : (
                   <Tooltip title="Xóa kho">
@@ -334,7 +334,7 @@ const EnhancedTableToolbar = (props) => {
                 {/* Agent - Delete warehouse */}
                 {numSelected > 1 ? (
                   <IconButton disabled={true}>
-                    <BorderColorIcon />
+                    <DeleteForeverIcon />
                   </IconButton>
                 ) : (
                   <Tooltip title="Xóa đại lý">

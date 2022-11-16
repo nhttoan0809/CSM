@@ -20,9 +20,9 @@ const ImportGoods = () => {
   const warehouse_id = useSelector((state) => state.warehouse.currentWarehouse);
 
   const [description, setDescription] = useState("");
-  const [width, setWidth] = useState("");
-  const [length, setLength] = useState("");
-  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState(2);
+  const [length, setLength] = useState(2);
+  const [height, setHeight] = useState(2);
   const [quantity, setQuantity] = useState(1);
 
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ const ImportGoods = () => {
             <Slider
               sx={{ marginX: "2rem" }}
               aria-label="Temperature"
-              defaultValue={1}
+              value={width}
               valueLabelDisplay="auto"
               step={1}
               marks
@@ -107,7 +107,7 @@ const ImportGoods = () => {
             <Slider
               sx={{ marginX: "2rem" }}
               aria-label="Temperature"
-              defaultValue={1}
+              value={length}
               valueLabelDisplay="auto"
               step={1}
               marks
@@ -124,7 +124,7 @@ const ImportGoods = () => {
             <Slider
               sx={{ marginX: "2rem" }}
               aria-label="Temperature"
-              defaultValue={1}
+              value={height}
               valueLabelDisplay="auto"
               step={1}
               marks
