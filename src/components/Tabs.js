@@ -1,10 +1,9 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { Outlet, useNavigate } from 'react-router-dom';
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import PropTypes from "prop-types";
+import * as React from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -17,11 +16,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -35,26 +30,46 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 export default function BasicTabs(props) {
-
   const navigate = useNavigate();
-  const tabsList = props.tabsList
+  const tabsList = props.tabsList;
   const [value, setValue] = React.useState(0);
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    tabsList.forEach((tab, ind) => {
+      if (location.pathname.includes(tab.url)) {
+        setValue(ind);
+      }
+    });
+  }, [location.pathname]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
           {tabsList.map((tab, index) => (
-            <Tab onClick={() => {navigate(tab.url)}} key={index} label={tab.title} {...a11yProps(index)} />
+            <Tab
+              onClick={() => {
+                navigate(tab.url);
+              }}
+              key={index}
+              label={tab.title}
+              {...a11yProps(index)}
+            />
           ))}
         </Tabs>
       </Box>

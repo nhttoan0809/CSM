@@ -192,7 +192,7 @@ const WarehouseDetailPage = () => {
                 Kích thước:
               </h3>
               <Typography sx={{ flex: 1, fontSize: "1.3rem" }}>
-                {`${warehouseInformation.width}:${warehouseInformation.length}:${warehouseInformation.height}`}
+                {`${warehouseInformation.length}:${warehouseInformation.width}:${warehouseInformation.height}`}
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>

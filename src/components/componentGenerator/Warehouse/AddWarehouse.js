@@ -12,10 +12,10 @@ const SliderCustomize = (props) => {
       sx={{ marginX: "2rem" }}
       aria-label="Temperature"
       valueLabelDisplay="auto"
-      step={1}
+      // step={1}
       marks
-      min={1}
-      max={10}
+      // min={1}
+      // max={10}
       {...props}
     />
   );
@@ -30,9 +30,9 @@ const AddWarehouse = ({ data }) => {
 
   const [warehouse_name, setWarehouse_name] = useState("");
   const [address, setAddress] = useState("");
-  const [length, setLength] = useState(3);
-  const [width, setWidth] = useState(3);
-  const [height, setHeight] = useState(3);
+  const [length, setLength] = useState(500);
+  const [width, setWidth] = useState(200);
+  const [height, setHeight] = useState(200);
 
   const dispatch = useDispatch();
 
@@ -120,6 +120,9 @@ const AddWarehouse = ({ data }) => {
               onChange={(e) => {
                 setWidth(e.target.value);
               }}
+              min={200}
+              max={400}
+              step={100}
             />
           </Box>
           <Box
@@ -138,6 +141,9 @@ const AddWarehouse = ({ data }) => {
               onChange={(e) => {
                 setLength(e.target.value);
               }}
+              min={400}
+              max={500}
+              step={100}
             />
           </Box>
           <Box
@@ -156,6 +162,9 @@ const AddWarehouse = ({ data }) => {
               onChange={(e) => {
                 setHeight(e.target.value);
               }}
+              min={200}
+              max={400}
+              step={100}
             />
           </Box>
         </Box>
