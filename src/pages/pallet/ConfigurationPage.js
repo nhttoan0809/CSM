@@ -1,58 +1,301 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Box,
   Button,
-  styled,
+  Slider,
   Typography,
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import CustomizeCanvas from "../../components/3D/CustomizeCanvas";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { SIZE522, SIZE523, SIZE422 } from "../../constant/warehouse";
-import WarehouseScene from "../../components/3D/WarehouseScene";
 import Pallet401534Scene from "../../components/3D/Pallet401534Scene";
 import Pallet601524Scene from "../../components/3D/Pallet601524Scene";
 import Pallet601534Scene from "../../components/3D/Pallet601534Scene";
+import WarehouseScene from "../../components/3D/WarehouseScene";
 import { SIZE401534, SIZE601524, SIZE601534 } from "../../constant/pallet";
+import { SIZE422, SIZE522, SIZE523 } from "../../constant/warehouse";
+import { setPalletList } from "../../redux/pallet";
+import convertPosToReaclPos from "../../utilityFunc/convertPosToReaclPos";
+import * as api from "./../../api";
 
-const Controler = ({ sx, title, onCancel, children }) => {
+const UpdatePositionComp = ({
+  pallet,
+  ind,
+  palletList,
+  warehouseSize,
+  resetPalletList,
+  paramsToUpdate,
+}) => {
+  const [enable, setEnable] = useState(false);
+  const [pushMessage, setPushMessage] = useState(false);
+  const dispatch = useDispatch();
+
+  const productList = useSelector((state) => state.product.productList);
+  const isDisabled = useMemo(() => {
+    return (
+      productList.filter((product) => product.pallet_id === pallet._id).length >
+        0 ?? false
+    );
+  }, [pallet, productList]);
+
+  useEffect(() => {
+    if (pushMessage) {
+      setTimeout(() => {
+        setPushMessage(false);
+      }, 5000);
+    }
+  }, [pushMessage]);
+
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        zIndex: 1,
-        overflow: "hidden",
-        background: "white",
-        top: 0,
-        ...sx,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          margin: ".5rem",
-          justifyContent: "space-between",
-          alignItems: "Center",
+    <>
+      <Button
+        sx={{ fontSize: ".85rem" }}
+        onClick={() => {
+          if (!enable) {
+            setEnable(true);
+          } else {
+            let newPalletList = [...palletList];
+            newPalletList[ind].position = newPalletList[ind].originalPosition;
+            resetPalletList(newPalletList);
+            setEnable(false);
+          }
         }}
       >
-        <h3 style={{ margin: 0 }}>{title}</h3>
-        <Button size="small" variant="contained" onClick={onCancel}>
-          X
-        </Button>
-        <Box>{children}</Box>
-      </div>
-    </Box>
+        id: {pallet._id}
+      </Button>
+      {enable && (
+        <Box sx={{ padding: "0 .5rem", marginBottom: "1rem" }}>
+          Toa do diem X: {convertPosToReaclPos(pallet.position)[0]}
+          <Slider
+            // sx={{ marginX: "2rem" }}
+            value={convertPosToReaclPos(pallet.position)[0]}
+            valueLabelDisplay="auto"
+            step={1}
+            marks
+            min={0}
+            max={convertPosToReaclPos(warehouseSize)[0] - pallet.length}
+            onChange={(event) => {
+              let newPalletList = [...palletList];
+              newPalletList[ind].position = `${event.target.value}-${
+                convertPosToReaclPos(pallet.position)[1]
+              }-${convertPosToReaclPos(pallet.position)[2]}`;
+              resetPalletList(newPalletList);
+            }}
+          />
+          Toa do diem Z: {convertPosToReaclPos(pallet.position)[1]}
+          <Slider
+            // sx={{ marginX: "2rem" }}
+            value={convertPosToReaclPos(pallet.position)[1]}
+            valueLabelDisplay="auto"
+            step={1}
+            marks
+            min={0}
+            max={convertPosToReaclPos(warehouseSize)[2] - pallet.width}
+            onChange={(event) => {
+              let newPalletList = [...palletList];
+              newPalletList[ind].position = `${
+                convertPosToReaclPos(pallet.position)[0]
+              }-${event.target.value}-${
+                convertPosToReaclPos(pallet.position)[2]
+              }`;
+              resetPalletList(newPalletList);
+            }}
+          />
+          <Button
+            disabled={isDisabled}
+            sx={{ margin: "0 .2rem" }}
+            variant="contained"
+            color="error"
+            onClick={async () => {
+              const res = await api.palletAPI.remove_from_warehouse(
+                paramsToUpdate.id_agent,
+                paramsToUpdate.id_warehouse,
+                paramsToUpdate.id_pallet
+              );
+              if (res.status === "Successfully") {
+                api.palletAPI
+                  .get_all(paramsToUpdate.id_agent, paramsToUpdate.id_warehouse)
+                  .then((data) => {
+                    if (data.status === "Successfully") {
+                      dispatch(setPalletList(data.data));
+                    } else {
+                      dispatch(setPalletList([]));
+                    }
+                  });
+              } else {
+                console.log("failure");
+              }
+            }}
+          >
+            Go pallet
+          </Button>
+          <Button
+            // size="small"
+            sx={{ margin: "0 .2rem" }}
+            variant="outlined"
+            onClick={async () => {
+              const position = `${convertPosToReaclPos(pallet.position)[0]}-${
+                convertPosToReaclPos(pallet.position)[1]
+              }-${convertPosToReaclPos(pallet.position)[2]}`;
+              const res = await api.palletAPI.update_position(
+                paramsToUpdate.id_agent,
+                paramsToUpdate.id_warehouse,
+                paramsToUpdate.id_pallet,
+                position
+              );
+              if (res.status === "Successfully") {
+                api.palletAPI
+                  .get_all(paramsToUpdate.id_agent, paramsToUpdate.id_warehouse)
+                  .then((data) => {
+                    if (data.status === "Successfully") {
+                      dispatch(setPalletList(data.data));
+                      setPushMessage(true);
+                    } else {
+                      dispatch(setPalletList([]));
+                    }
+                  });
+              } else {
+                console.log("failure");
+              }
+            }}
+          >
+            Cap nhat
+          </Button>
+          {pushMessage && (
+            <Alert sx={{ marginTop: ".5rem" }} severity="success">
+              Cap nhat thanh cong!!!
+            </Alert>
+          )}
+        </Box>
+      )}
+    </>
+  );
+};
+
+const SetupPositionComp = ({
+  pallet,
+  ind,
+  palletList,
+  warehouseSize,
+  resetPalletList,
+  addToDeMo,
+  paramsToAdd,
+}) => {
+  const [enable, setEnable] = useState(false);
+  // const [pushMessage, setPushMessage] = useState(false);
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <Button
+        sx={{ fontSize: ".85rem" }}
+        onClick={() => {
+          if (!enable) {
+            let newPalletList = [...palletList];
+            newPalletList[ind].position = `0-0-0`;
+            newPalletList[ind].is_used = true;
+            addToDeMo(newPalletList);
+            setEnable(true);
+          } else {
+            let newPalletList = [...palletList];
+            delete newPalletList[ind].position;
+            delete newPalletList[ind].is_used;
+            resetPalletList(newPalletList);
+            setEnable(false);
+          }
+        }}
+      >
+        id: {pallet._id}
+      </Button>
+      {enable && (
+        <Box sx={{ padding: "0 .5rem", marginBottom: "1rem" }}>
+          {pallet.position && (
+            <>
+              Toa do diem X: {convertPosToReaclPos(pallet.position)[0]}
+              <Slider
+                // sx={{ marginX: "2rem" }}
+                value={convertPosToReaclPos(pallet.position)[0]}
+                valueLabelDisplay="auto"
+                step={1}
+                marks
+                min={0}
+                max={convertPosToReaclPos(warehouseSize)[0] - pallet.length}
+                onChange={(event) => {
+                  let newPalletList = [...palletList];
+                  newPalletList[ind].position = `${event.target.value}-${
+                    convertPosToReaclPos(pallet.position)[1]
+                  }-${convertPosToReaclPos(pallet.position)[2]}`;
+                  resetPalletList(newPalletList);
+                }}
+              />
+              Toa do diem Z: {convertPosToReaclPos(pallet.position)[1]}
+              <Slider
+                // sx={{ marginX: "2rem" }}
+                value={convertPosToReaclPos(pallet.position)[1]}
+                valueLabelDisplay="auto"
+                step={1}
+                marks
+                min={0}
+                max={convertPosToReaclPos(warehouseSize)[2] - pallet.width}
+                onChange={(event) => {
+                  let newPalletList = [...palletList];
+                  newPalletList[ind].position = `${
+                    convertPosToReaclPos(pallet.position)[0]
+                  }-${event.target.value}-${
+                    convertPosToReaclPos(pallet.position)[2]
+                  }`;
+                  resetPalletList(newPalletList);
+                }}
+              />
+              <Button
+                variant="outlined"
+                onClick={async () => {
+                  const position = `${
+                    convertPosToReaclPos(pallet.position)[0]
+                  }-${convertPosToReaclPos(pallet.position)[1]}-${
+                    convertPosToReaclPos(pallet.position)[2]
+                  }`;
+                  const res = await api.palletAPI.add_to_warehouse(
+                    paramsToAdd.id_agent,
+                    paramsToAdd.id_warehouse,
+                    paramsToAdd.id_pallet,
+                    position
+                  );
+                  if (res.status === "Successfully") {
+                    api.palletAPI
+                      .get_all(paramsToAdd.id_agent, paramsToAdd.id_warehouse)
+                      .then((data) => {
+                        if (data.status === "Successfully") {
+                          dispatch(setPalletList(data.data));
+                        } else {
+                          dispatch(setPalletList([]));
+                        }
+                      });
+                  } else {
+                    console.log("failure");
+                  }
+                }}
+              >
+                Them pallet
+              </Button>
+              {/* {pushMessage && (
+                <Alert sx={{ marginTop: ".5rem" }} severity="success">
+                  Them pallet thanh cong!!!
+                </Alert>
+              )} */}
+            </>
+          )}
+        </Box>
+      )}
+    </>
   );
 };
 
 const PalletConfigurationPage = () => {
-  const [isControll, setIsControll] = useState(true);
-
   const currentAgent = useSelector((state) => state.agent.currentAgent);
   const currentWarehouse = useSelector(
     (state) => state.warehouse.currentWarehouse
@@ -116,6 +359,28 @@ const PalletConfigurationPage = () => {
     return [usedList, unUsedList];
   }, [palletListWithSize]);
 
+  const [tempUsedPalletList, setTempUsedPalletList] = useState([]);
+  const [tempUnUsedPalletList, setTempUnUsedPalletList] = useState([]);
+  // const [demoPallet, setDemoPallet] = useState([]);
+
+  useEffect(() => {
+    setTempUsedPalletList([]);
+    setTempUnUsedPalletList([]);
+  }, [currentWarehouse]);
+
+  useEffect(() => {
+    setTempUsedPalletList(
+      usedPalletList.map((pallet) => ({
+        ...pallet,
+        originalPosition: pallet.position,
+      }))
+    );
+  }, [usedPalletList]);
+
+  useEffect(() => {
+    setTempUnUsedPalletList(unUsedPalletList);
+  }, [unUsedPalletList]);
+
   return (
     <>
       <Box
@@ -140,74 +405,179 @@ const PalletConfigurationPage = () => {
             {warehouseSize && (
               <WarehouseScene warehouseSize={warehouseSize} useCamera={true} />
             )}
-            {usedPalletList.length > 0 && (
+            {tempUsedPalletList.length > 0 && (
               <>
-                {usedPalletList.map((pallet, ind) => {
-                  const type = `${pallet.length}-${pallet.width}-${pallet.height}`;
-                  switch (type) {
-                    case SIZE401534:
-                      return (
-                        <Pallet401534Scene
-                          key={ind}
-                          warehouseSize={warehouseSize}
-                          useCamera={false}
-                          positionPallet={pallet.position}
-                        />
-                      );
-                    case SIZE601524:
-                      return (
-                        <Pallet601524Scene
-                          key={ind}
-                          warehouseSize={warehouseSize}
-                          useCamera={false}
-                          positionPallet={pallet.position}
-                        />
-                      );
-                    case SIZE601534:
-                      return (
-                        <Pallet601534Scene
-                          key={ind}
-                          warehouseSize={warehouseSize}
-                          useCamera={false}
-                          positionPallet={pallet.position}
-                        />
-                      );
-                    default:
-                      return <></>;
-                  }
-                })}
+                {tempUsedPalletList
+                  .filter((p) => p.is_used && p.position)
+                  .map((pallet, ind) => {
+                    const type = `${pallet.length}-${pallet.width}-${pallet.height}`;
+                    switch (type) {
+                      case SIZE401534:
+                        return (
+                          <Pallet401534Scene
+                            key={ind}
+                            warehouseSize={warehouseSize}
+                            useCamera={false}
+                            positionPallet={pallet.position}
+                          />
+                        );
+                      case SIZE601524:
+                        return (
+                          <Pallet601524Scene
+                            key={ind}
+                            warehouseSize={warehouseSize}
+                            useCamera={false}
+                            positionPallet={pallet.position}
+                          />
+                        );
+                      case SIZE601534:
+                        return (
+                          <Pallet601534Scene
+                            key={ind}
+                            warehouseSize={warehouseSize}
+                            useCamera={false}
+                            positionPallet={pallet.position}
+                          />
+                        );
+                      default:
+                        return <></>;
+                    }
+                  })}
               </>
             )}
+            {tempUnUsedPalletList.length > 0 && (
+              <>
+                {tempUnUsedPalletList
+                  .filter((p) => p.is_used && p.position)
+                  .map((pallet, ind) => {
+                    const type = `${pallet.length}-${pallet.width}-${pallet.height}`;
+                    switch (type) {
+                      case SIZE401534:
+                        return (
+                          <Pallet401534Scene
+                            key={ind}
+                            warehouseSize={warehouseSize}
+                            useCamera={false}
+                            positionPallet={pallet.position}
+                          />
+                        );
+                      case SIZE601524:
+                        return (
+                          <Pallet601524Scene
+                            key={ind}
+                            warehouseSize={warehouseSize}
+                            useCamera={false}
+                            positionPallet={pallet.position}
+                          />
+                        );
+                      case SIZE601534:
+                        return (
+                          <Pallet601534Scene
+                            key={ind}
+                            warehouseSize={warehouseSize}
+                            useCamera={false}
+                            positionPallet={pallet.position}
+                          />
+                        );
+                      default:
+                        return <></>;
+                    }
+                  })}
+              </>
+            )}
+
+            <directionalLight color="white" position={[0, 0, 5]} />
+            <directionalLight color="white" position={[5, 0, 0]} />
+            <directionalLight color="white" position={[-5, 0, 0]} />
+            <directionalLight color="white" position={[0, 0, -5]} />
+            <directionalLight color="white" position={[0, 5, 0]} />
+            <directionalLight color="white" position={[0, -5, 0]} />
           </CustomizeCanvas>
         </Box>
         <Box
           sx={{
             backgroundColor: "white",
             borderRadius: "5px",
-            minWidth: "15rem",
+            minWidth: "20rem",
             position: "relative",
+            height: "70vh",
+            overflow: "scroll",
+            maxWidth: "27rem",
           }}
         >
           <h5>Danh Sách Pallet</h5>
-          <Controler
-            sx={{ width: isControll ? "100%" : "0" }}
-            title={`Điều khiển`}
-            onCancel={() => {
-              setIsControll(false);
-            }}
-          ></Controler>
           <Box sx={{ margin: ".5rem 1rem" }}>
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography>Pallet đã sử dụng</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                {usedPalletList.map((pallet, ind) => {
+                {/* {console.log("tempUsedPalletList: ", tempUsedPalletList)} */}
+                {tempUsedPalletList.map((pallet, ind, palletList) => {
                   return (
-                    <>
-                      <p key={ind}>id: {pallet._id}</p>
-                    </>
+                    <div key={ind}>
+                      <UpdatePositionComp
+                        pallet={pallet}
+                        ind={ind}
+                        palletList={palletList}
+                        warehouseSize={warehouseSize}
+                        resetPalletList={(newPalletList) => {
+                          setTempUsedPalletList(newPalletList);
+                        }}
+                        paramsToUpdate={{
+                          id_agent: currentAgent,
+                          id_warehouse: currentWarehouse,
+                          id_pallet: pallet._id,
+                        }}
+                      />
+                    </div>
                   );
+                  // return (
+                  //   <>
+                  //     <Button>id: {pallet._id}</Button>
+                  //     Toa do diem X: {convertPosToReaclPos(pallet.position)[0]}
+                  //     <Slider
+                  //       sx={{ marginX: "2rem" }}
+                  //       value={convertPosToReaclPos(pallet.position)[0]}
+                  //       valueLabelDisplay="auto"
+                  //       step={1}
+                  //       marks
+                  //       min={0}
+                  //       max={
+                  //         convertPosToReaclPos(warehouseSize)[0] - pallet.length
+                  //       }
+                  //       onChange={(event) => {
+                  //         let newPalletList = [...tempUsedPalletList];
+                  //         newPalletList[ind].position = `${
+                  //           event.target.value
+                  //         }-${convertPosToReaclPos(pallet.position)[1]}-${
+                  //           convertPosToReaclPos(pallet.position)[2]
+                  //         }`;
+                  //         setTempUsedPalletList(newPalletList);
+                  //       }}
+                  //     />
+                  //     Toa do diem Z: {convertPosToReaclPos(pallet.position)[1]}
+                  //     <Slider
+                  //       sx={{ marginX: "2rem" }}
+                  //       value={convertPosToReaclPos(pallet.position)[1]}
+                  //       valueLabelDisplay="auto"
+                  //       step={1}
+                  //       marks
+                  //       min={0}
+                  //       max={
+                  //         convertPosToReaclPos(warehouseSize)[2] - pallet.width
+                  //       }
+                  //       onChange={(event) => {
+                  //         let newPalletList = [...tempUsedPalletList];
+                  //         newPalletList[ind].position = `
+                  //         ${convertPosToReaclPos(pallet.position)[0]}-${
+                  //           event.target.value
+                  //         }-${convertPosToReaclPos(pallet.position)[2]}`;
+                  //         setTempUsedPalletList(newPalletList);
+                  //       }}
+                  //     />
+                  //   </>
+                  // );
                 })}
               </AccordionDetails>
             </Accordion>
@@ -216,21 +586,27 @@ const PalletConfigurationPage = () => {
                 <Typography>Pallet chưa sử dụng</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                {unUsedPalletList.map((pallet, ind) => {
+                {tempUnUsedPalletList.map((pallet, ind, palletList) => {
                   return (
-                    <Box
-                      key={ind}
-                      sx={{ display: "flex", flexDirection: "column" }}
-                    >
-                      <Button
-                        onClick={() => {
-                          setIsControll(true);
+                    <div key={ind}>
+                      <SetupPositionComp
+                        pallet={pallet}
+                        ind={ind}
+                        palletList={palletList}
+                        warehouseSize={warehouseSize}
+                        resetPalletList={(newPalletList) => {
+                          setTempUnUsedPalletList(newPalletList);
                         }}
-                      >
-                        id: {pallet._id}
-                      </Button>
-                      {/* <Controler /> */}
-                    </Box>
+                        addToDeMo={(newPalletList) => {
+                          setTempUnUsedPalletList(newPalletList);
+                        }}
+                        paramsToAdd={{
+                          id_agent: currentAgent,
+                          id_warehouse: currentWarehouse,
+                          id_pallet: pallet._id,
+                        }}
+                      />
+                    </div>
                   );
                 })}
               </AccordionDetails>

@@ -15,11 +15,12 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import AddDrawer from "../../components/AddDrawer";
 import AccDetailscustomize from "../../components/sensor/AccDetailscustomize";
 import AccSumaryCustomize from "../../components/sensor/AccSumaryCustomize";
 import { setIotAccountList } from "../../redux/iotAccount";
+import fetchiotaccount from "../../utilityFunc/fetchiotaccount";
 import * as api from "./../../api";
 import AccCustomize from "./../../components/sensor/AccCustomize";
 
@@ -140,7 +141,9 @@ const GenerateSensorTable = ({ idIotAccount }) => {
 const GenerateTableBody = ({ idIotAccount, idStation }) => {
   const id_agent = useSelector((state) => state.agent.currentAgent);
   const id_warehouse = useSelector((state) => state.warehouse.currentWarehouse);
+  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     api.sensorAPI
@@ -194,6 +197,8 @@ const GenerateTableBody = ({ idIotAccount, idStation }) => {
                         )
                         .then((res) => {
                           if (res.status === "Successfully") {
+                            fetchiotaccount(id_agent, id_warehouse, dispatch);
+                            // navigate("/sensor");
                             api.sensorAPI
                               .get_all(
                                 id_agent,
@@ -312,17 +317,17 @@ const SensorDetailPage = () => {
   );
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (idWarehouse !== -1) {
-      api.iotAccountAPI.get_all(idAgent, idWarehouse).then((data) => {
-        if (data.status === "Successfully") {
-          dispatch(setIotAccountList(data.data));
-        } else {
-          dispatch(setIotAccountList([]));
-        }
-      });
-    }
-  }, [idAgent, idWarehouse, dispatch]);
+  // useEffect(() => {
+  //   if (idWarehouse !== -1) {
+  //     api.iotAccountAPI.get_all(idAgent, idWarehouse).then((data) => {
+  //       if (data.status === "Successfully") {
+  //         dispatch(setIotAccountList(data.data));
+  //       } else {
+  //         dispatch(setIotAccountList([]));
+  //       }
+  //     });
+  //   }
+  // }, [idAgent, idWarehouse, dispatch]);
 
   if (idWarehouse === -1) {
     return <Navigate to="/agent" replace={true} />;

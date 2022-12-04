@@ -61,8 +61,8 @@ const DeletePallet = (props) => {
                 value={pallet.is_used ? "Dang su dung" : "Co san"}
                 helperText={
                   pallet.is_used
-                    ? "Xoa pallet nay se go bo cac hang hoa co tren pallet"
-                    : "Co the xoa"
+                    ? "Pallet dang duoc su dung, khong the xoa"
+                    : ""
                 }
               />
             </Box>
@@ -82,9 +82,9 @@ const DeletePallet = (props) => {
             Huy
           </Button>
           <Button
-            // disabled={!isWarning(newPalletList)}
+            disabled={isWarning(newPalletList)}
             variant="outlined"
-            color={isWarning(newPalletList) ? "warning" : "success"}
+            // color={isWarning(newPalletList) ? "warning" : "success"}
             onClick={() => {
               newPalletList.forEach(async (pallet) => {
                 let isError = false;

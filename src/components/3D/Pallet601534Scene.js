@@ -15,9 +15,13 @@ export default function Pallet601524Scene({
   positionPallet,
 }) {
   const { nodes, materials } = useSpline(PALLETURL);
-  const size = convertToWarehouseSize(warehouseSize);
-  const defPos = defaultPositionPallet(Object.values(size), [60, 15, 34]);
-  const position = convertPosToReaclPos(positionPallet);
+  const size = warehouseSize ? convertToWarehouseSize(warehouseSize) : null;
+  let defPos = warehouseSize
+    ? defaultPositionPallet(Object.values(size), [60, 15, 34])
+    : [0, 0, 0];
+  const position = warehouseSize
+    ? convertPosToReaclPos(positionPallet)
+    : [0, 0, 0];
   return (
     <>
       {nodes && materials && (
@@ -329,7 +333,7 @@ export default function Pallet601524Scene({
         <OrthographicCamera
           name="1"
           makeDefault={true}
-          zoom={11.73}
+          zoom={9}
           far={100000}
           near={-100000}
           position={[577.35, 577.35, 577.35]}

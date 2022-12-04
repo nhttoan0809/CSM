@@ -15,11 +15,15 @@ export default function Pallet401534Scene({
   positionPallet,
 }) {
   const { nodes, materials } = useSpline(PALLETURL);
-  const size = convertToWarehouseSize(warehouseSize);
-  let defPos = defaultPositionPallet(Object.values(size), [40, 15, 34]);
-  const position = convertPosToReaclPos(positionPallet);
-  console.log("defPos: ", defPos);
-  console.log("position: ", position);
+  const size = warehouseSize ? convertToWarehouseSize(warehouseSize) : null;
+  let defPos = warehouseSize
+    ? defaultPositionPallet(Object.values(size), [40, 15, 34])
+    : [0, 0, 0];
+  const position = warehouseSize
+    ? convertPosToReaclPos(positionPallet)
+    : [0, 0, 0];
+  // console.log("defPos: ", defPos);
+  // console.log("position: ", position);
   return (
     <>
       {nodes && materials && (

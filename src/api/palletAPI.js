@@ -41,11 +41,9 @@ const palletAPI = {
     id_warehouse,
     id_pallet,
     position,
-    storage
   ) => {
     const body = {
       position,
-      storage,
     };
     const data = await axiosClient.post(
       `agent/${id_agent}/warehouse/${id_warehouse}/pallet/${id_pallet}/add_to_warehouse`,
