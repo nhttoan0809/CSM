@@ -2,8 +2,8 @@
 
 ## Overview
 
-Welcome to the **Cold Storage Management System (CSM)** — a modern, intuitive web application for managing cold storage warehouses, pallets, products, and IoT sensors.  
-This system empowers organizations to visualize, track, and optimize their cold storage operations with real-time data and interactive 3D interfaces.
+🌟 Welcome to the **Cold Storage Management System (CSM)** — a modern, intuitive web application for managing cold storage warehouses, pallets, products, and IoT sensors.  
+🚀 This system empowers organizations to visualize, track, and optimize their cold storage operations with real-time data and interactive 3D interfaces.
 
 > ⚡ **Note:** This frontend requires the [CSM API server](https://github.com/nhttoan0809/CSM-API) to function as its backend.
 
@@ -13,34 +13,34 @@ This system empowers organizations to visualize, track, and optimize their cold 
 
 ### 🏢 Warehouse & Organization Management
 
-- Visualize and manage multiple warehouses, agents, and companies.
-- Interactive 3D layouts for warehouse and pallet configuration.
-- Bulk operations for efficient warehouse management.
+- 🏭 Visualize and manage multiple warehouses, agents, and companies.
+- 🗺️ Interactive 3D layouts for warehouse and pallet configuration.
+- ⚙️ Bulk operations for efficient warehouse management.
 
 ![Warehouse Management](./docs/screenshots/warehouse.png)
 
 ### 📦 Pallet & Product Tracking
 
-- Track pallets and products with detailed metadata, positions, and status.
-- Assign, move, and update pallets and products in real time.
-- Visualize pallet and product placement in 3D.
+- 🏷️ Track pallets and products with detailed metadata, positions, and status.
+- 🔄 Assign, move, and update pallets and products in real time.
+- 🧊 Visualize pallet and product placement in 3D.
 
 ![Pallet Management](./docs/screenshots/pallet.png)
 ![Product Management](./docs/screenshots/product.png)
 
 ### 🌡️ IoT Sensor Integration
 
-- Monitor temperature and sensor data for each warehouse and pallet.
-- Real-time sensor status and placement visualization.
-- Integrate with external IoT accounts and stations.
+- 🌡️ Monitor temperature and sensor data for each warehouse and pallet.
+- 🟢 Real-time sensor status and placement visualization.
+- 🔗 Integrate with external IoT accounts and stations.
 
 ![Sensor Management](./docs/screenshots/sensor.png)
 ![Sensor 3D View](./docs/screenshots/sensor-3d.png)
 
 ### 🛡️ Secure & Role-Based Access
 
-- User authentication and role-based access control.
-- Organization-level and agent-level permissions.
+- 🔐 User authentication and role-based access control.
+- 🏢 Organization-level and agent-level permissions.
 
 ### 📊 Analytics & Reporting _(coming soon)_
 
