@@ -1,9 +1,5 @@
 # ❄️ Cold Storage Management System (CSM) ❄️
 
-## Definition
-
-Cold Storage Management (CSM) is a system designed to simulate a cold storage facility and the temperature-controlled products stored inside, based on a real-world cold warehouse integrated with a sensor system. The purpose of CSM is to provide users — acting as managers or supervisors — with the ability to monitor the condition of the products through temperature data, enabling them to make informed decisions accordingly.
-
 ## Overview
 
 Welcome to the **Cold Storage Management System (CSM)** — a modern, intuitive web application for managing cold storage warehouses, pallets, products, and IoT sensors.  
