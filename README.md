@@ -1,70 +1,87 @@
-# Getting Started with Create React App
+# ❄️ Cold Storage Management System (CSM) ❄️
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Definition
 
-## Available Scripts
+Cold Storage Management (CSM) is a system designed to simulate a cold storage facility and the temperature-controlled products stored inside, based on a real-world cold warehouse integrated with a sensor system. The purpose of CSM is to provide users — acting as managers or supervisors — with the ability to monitor the condition of the products through temperature data, enabling them to make informed decisions accordingly.
 
-In the project directory, you can run:
+## Overview
 
-### `npm start`
+Welcome to the **Cold Storage Management System (CSM)** — a modern, intuitive web application for managing cold storage warehouses, pallets, products, and IoT sensors.  
+This system empowers organizations to visualize, track, and optimize their cold storage operations with real-time data and interactive 3D interfaces.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+> ⚡ **Note:** This frontend requires the [CSM API server](https://github.com/nhttoan0809/CSM-API) to function as its backend.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🚀 Key Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🏢 Warehouse & Organization Management
 
-### `npm run build`
+- Visualize and manage multiple warehouses, agents, and companies.
+- Interactive 3D layouts for warehouse and pallet configuration.
+- Bulk operations for efficient warehouse management.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![Warehouse Management](./docs/screenshots/warehouse.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 📦 Pallet & Product Tracking
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Track pallets and products with detailed metadata, positions, and status.
+- Assign, move, and update pallets and products in real time.
+- Visualize pallet and product placement in 3D.
 
-### `npm run eject`
+![Pallet Management](./docs/screenshots/pallet.png)
+![Product Management](./docs/screenshots/product.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 🌡️ IoT Sensor Integration
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Monitor temperature and sensor data for each warehouse and pallet.
+- Real-time sensor status and placement visualization.
+- Integrate with external IoT accounts and stations.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Sensor Management](./docs/screenshots/sensor.png)
+![Sensor 3D View](./docs/screenshots/sensor-3d.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 🛡️ Secure & Role-Based Access
+
+- User authentication and role-based access control.
+- Organization-level and agent-level permissions.
+
+### 📊 Analytics & Reporting _(coming soon)_
+
+- Generate reports and analytics for warehouse performance and compliance.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, Material-UI, [React Three Fiber](https://r3f.docs.pmnd.rs/getting-started/introduction), [Three.js](https://threejs.org/) (for 3D visualization)
+- **State Management:** React Context API / Redux
+- **Routing:** React Router
+- **API Communication:** Axios
+- **Authentication:** JWT-based (via backend API)
+- **Build Tool:** Create React App
+- **Design Tool:** Spline (for [Pallet](https://spline.design/) 3D models)
+
+---
+
+## Getting Started
+
+1. Clone this repository.
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
+4. Ensure the [CSM API server](https://github.com/nhttoan0809/CSM-API) is running and accessible.
+
+---
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React Documentation](https://reactjs.org/)
+- [Material-UI Documentation](https://mui.com/)
+- [React Three Fiber Documentation](https://r3f.docs.pmnd.rs/)
+- [Three.js Documentation](https://threejs.org/docs/)
+- [Spline Documentation](https://docs.spline.design/)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+_For backend/API details, see the [CSM API repository](https://github.com/nhttoan0809/CSM-API)._
