@@ -12,7 +12,7 @@
 
 [Xem tính năng](#features) · [Tài liệu kỹ thuật & cài đặt](TECHNICAL.md)
 
-![Giao diện bố trí và quản lý kho lạnh CSM](docs/screenshots/warehouse.png)
+![Giao diện bố trí và quản lý kho lạnh CSM](docs/screenshots/product.png)
 
 ---
 
